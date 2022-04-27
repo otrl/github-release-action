@@ -1,0 +1,9 @@
+name: 'Release Action'
+description: 'A github action to create a github release'
+author: 'On Track Retail'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'git-merge'
+  color: 'purple'
