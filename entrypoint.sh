@@ -44,12 +44,14 @@ EOF
 main() {
     #repository_name=$(basename "$(git rev-parse --show-toplevel)")
     repository_name=$GITHUB_REPOSITORY
-    latest_tag=$(git describe --tags --abbrev=0)
-    previous_tag=$(git describe --abbrev=0 --tags "$(git rev-list --tags --skip=1 --max-count=1)" || true)
-    if [ -z $previous_tag ]; then
-        # look for changes since the first commit
-        previous_tag=$(git rev-list --max-parents=0 HEAD)
-    fi
+#    latest_tag=$(git describe --tags --abbrev=0)
+#    previous_tag=$(git describe --abbrev=0 --tags "$(git rev-list --tags --skip=1 --max-count=1)" || true)
+#    if [ -z $previous_tag ]; then
+#        # look for changes since the first commit
+#        previous_tag=$(git rev-list --max-parents=0 HEAD)
+#    fi
+    latest_tag=$(git tag --sort=committerdate | tail -1)
+    previous_tag=$(git tag --sort=committerdate | tail -2 | head -1)
 
     commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
     release_name="$repository_name - $latest_tag"
