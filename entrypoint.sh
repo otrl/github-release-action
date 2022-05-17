@@ -52,9 +52,19 @@ main() {
 #    fi
     latest_tag=$(git tag --sort=committerdate | tail -1)
     previous_tag=$(git tag --sort=committerdate | tail -2 | head -1)
+    echo "latest_tag: $latest_tag"
+    echo "previous_tag: $previous_tag"
 
-    commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
-    release_name="$repository_name - $latest_tag"
+    tag1=$(git rev-list -n 1 "$previous_tag")
+    tag2=$(git rev-list -n 1 "$latest_tag")
+    commits=$(git log "$tag1" -- "$tag2" --oneline)
+
+    #commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
+    if [ $repository_name = "otrl/aws-rail-deployment" ]; then
+      release_name="$latest_tag"
+    else
+      release_name="$repository_name - $latest_tag"
+    fi
 
     # 1. Extracts the commit messages and drops the commit hash
     # 2. Builds the Markdown (MD) - replaces CORE-xxxx, OPS-xxxx and CT-xxxx with the MD link for the JIRA ticket
