@@ -51,7 +51,11 @@ main() {
 #        previous_tag=$(git rev-list --max-parents=0 HEAD)
 #    fi
 
-    latest_tag=$(git tag --sort=committerdate) | tail -1
+    #cd ${GITHUB_WORKSPACE}/.
+    latest_tag=$(git describe --tags --abbrev=0)
+    echo "latest_tag: $latest_tag"
+
+    latest_tag=$(git tag "--sort=committerdate" | tail -1)
     previous_tag=$(git tag --sort=committerdate | tail -2 | head -1)
     echo "latest_tag: $latest_tag"
     echo "previous_tag: $previous_tag"
