@@ -51,7 +51,7 @@ main() {
 #        previous_tag=$(git rev-list --max-parents=0 HEAD)
 #    fi
 
-    #cd ${GITHUB_WORKSPACE}/.
+    cd ${GITHUB_WORKSPACE}/.
     latest_tag=$(git describe --tags --abbrev=0)
     echo "latest_tag: $latest_tag"
 
