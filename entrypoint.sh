@@ -54,7 +54,7 @@ main() {
     latest_tag=$(git tag --sort=committerdate | tail -1)
     previous_tag=$(git tag --sort=committerdate | tail -2 | head -1)
     echo "latest_tag: $latest_tag"
-    echo "latest_tag: $previous_tag"
+    echo "previous_tag: $previous_tag"
 
     tag1=$(git rev-list -n 1 "$previous_tag")
     tag2=$(git rev-list -n 1 "$latest_tag")
