@@ -58,7 +58,7 @@ main() {
 
     tag1=$(git rev-list -n 1 "$previous_tag")
     tag2=$(git rev-list -n 1 "$latest_tag")
-    commits=$(git log "$tag1".."$tag2" --oneline)
+    commits=$(git log "$tag1" -- "$tag2" --oneline)
 
     #commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
     release_name="$repository_name - $latest_tag"
