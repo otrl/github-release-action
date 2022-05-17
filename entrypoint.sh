@@ -60,7 +60,7 @@ main() {
     commits=$(git log "$tag1" -- "$tag2" --oneline)
 
     #commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
-    if [$repository_name = "otrl/aws-rail-deployment"]; then
+    if [ $repository_name = "otrl/aws-rail-deployment" ]; then
       release_name="$latest_tag"
     else
       release_name="$repository_name - $latest_tag"
