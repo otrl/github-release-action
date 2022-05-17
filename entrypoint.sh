@@ -50,10 +50,17 @@ main() {
 #        # look for changes since the first commit
 #        previous_tag=$(git rev-list --max-parents=0 HEAD)
 #    fi
+
     latest_tag=$(git tag --sort=committerdate | tail -1)
     previous_tag=$(git tag --sort=committerdate | tail -2 | head -1)
+    echo $latest_tag
+    echo $previous_tag
 
-    commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
+    tag1=$(git rev-list -n 1 "$previous_tag")
+    tag2=$(git rev-list -n 1 "$latest_tag")
+    commits=$(git log "$tag1".."$tag2" --oneline)
+
+    #commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
     release_name="$repository_name - $latest_tag"
 
     # 1. Extracts the commit messages and drops the commit hash
