@@ -16,9 +16,9 @@ create_release_request_payload() {
     cat <<EOF
         {
             "tag_name": "$1",
-            "target_commitish": "master",
-            "name": "$2",
-            "body": "$3",
+            "target_commitish": "$2",
+            "name": "$3",
+            "body": "$4",
             "draft": false,
             "prerelease": false
         }
@@ -58,6 +58,7 @@ main() {
     tag1=$(git rev-list -n 1 "$previous_tag")
     tag2=$(git rev-list -n 1 "$latest_tag")
     commits=$(git log "$tag1" -- "$tag2" --oneline)
+    default_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
 
     #commits=$(git log "${previous_tag}".."${latest_tag}" --oneline)
     if [ $repository_name = "otrl/aws-rail-deployment" ]; then
@@ -93,10 +94,10 @@ main() {
 
     echo
     echo -e "\e[33m Request payload \e[39m"
-    create_release_request_payload "$latest_tag" "$release_name" "$release_notes"
+    create_release_request_payload "$latest_tag" "$default_branch" "$release_name" "$release_notes"
 
     create_release_response=$(curl \
-      -d "$(create_release_request_payload "$latest_tag" "$release_name" "$release_notes")" \
+      -d "$(create_release_request_payload "$latest_tag" "$default_branch" "$release_name" "$release_notes")" \
       -H "Authorization: token $GITHUB_TOKEN" \
       -H "Content-Type: application/json" \
       -X POST https://api.github.com/repos/"${repository_name}"/releases)
@@ -120,7 +121,7 @@ main() {
         release_id=$(echo "$get_release_response" | grep '"id":' | head -1 | grep -o '[0-9]\+')
 
         update_release_response=$(curl \
-            -d "$(create_release_request_payload "$latest_tag" "$release_name" "$release_notes")" \
+            -d "$(create_release_request_payload "$latest_tag" "$default_branch" "$release_name" "$release_notes")" \
             -H "Authorization: token $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
             -X PATCH https://api.github.com/repos/"${repository_name}"/releases/"${release_id}")
